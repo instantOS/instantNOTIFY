@@ -38,12 +38,13 @@ while [ -n "$NREAD" ]; do
         echo "$READMESSAGE
 > "
         echo ':b Back
+:b Mark as unread
 :r Delete
 :y Close'
     } | instantmenu -c -l 18 -h -1 -q "notification" -bw 4 -a 4)
 
     [ -z "$SELECTION" ] && exit
-    instantnotifyctl r "$MESSAGE"
+    [ "$SELECTION" = ":b Mark as unread" ] || instantnotifyctl r "$MESSAGE"
 
     case "$SELECTION" in
     *Delete)
@@ -54,6 +55,9 @@ while [ -n "$NREAD" ]; do
         ;;
     *Back)
         echo "back"
+        ;;
+    *unread)
+        instantnotifyctl u "$MESSAGE"
         ;;
     *)
         echo "app"

@@ -20,7 +20,7 @@ if ! echo "$1" | grep -Eiq '(discord|spotify|thunderbird|mailspring)' && ! iconf
         fi
     fi
     mpv ~/instantos/notifications/notification.ogg
-fi
+fi &
 
 if echo "$3" | grep -E '.{500,}'; then
     CONTENTS="message too long to display"

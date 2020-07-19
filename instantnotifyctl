@@ -52,4 +52,12 @@ r*)
     # mark as read
     sq 'UPDATE notifications SET read = 1 WHERE message="'"$2"'";'
     ;;
+u*)
+    # mark as unread
+    sq 'UPDATE notifications SET read = 0 WHERE message="'"$2"'";'
+    ;;
+c*)
+    # get amounf of unread notifications
+    sq 'SELECT count(read) FROM notifications WHERE read=0;'
+    ;;
 esac
