@@ -19,21 +19,32 @@ cd /tmp/notifications
 
 notifmenu() {
     #   sed 's/^/:b /g' | instantmenu -c -l 18 -h -1 -p "notifications" -q "search notifications" -bw 4 -a 4 | grep -o '\[.*'
-    instantnotifyctl l | sed 's/\(.*\);:;\(.*\);:;\(.*\);:;\(.*\);:;\(.*\)/:b \5 [\1]  (\2) *\3* \4/g' | sed 's/^:b 0/:b /g' | sed 's/^:b 1/:b /g' |
+    instantnotifyctl l | sed 's/\(.*\);:;\(.*\);:;\(.*\);:;\(.*\);:;\(.*\)/:b \5 [\1]  (\2) *\3* \4/g' | sed 's/^:b 0/:r /g' | sed 's/^:b 1/:b /g' | tac |
         instantmenu -c -l 18 -h -1 -p "notifications" -q "search notifications" -bw 4 -a 4 | grep -o '\[.*'
 }
+refreshmenu() {
+    NREAD=$(notifmenu)
+    MESSAGE="$(echo "$NREAD" | grep -o '.*' | grep -o '[^]*')"
+    READMESSAGE="$(echo "$MESSAGE" | sed -e 's/.\{50\}/&\n/g' | sed 's/^/>      /g')"
+}
 
-NREAD=$(notifmenu)
-MESSAGE="$(echo "$NREAD" | grep -o '.*' | grep -o '[^]*')"
+refreshmenu
 
 while [ -n "$NREAD" ]; do
-    # wrap lines
-    SELECTION="$(echo "$NREAD" | grep -o '(.*' | sed -e "s/.\{150\}/&\n/g" |
-        sed 's/\[\([0-9]*:[0-9]*\)\]  (\(.*\)) \*\(.*\)\* .\(.*\)/:g Application :  \2\n            \1\n      \3\n      \4\n /g' |
-        sed -e '$a:b Back\n:r Delete\n:y Close' |
-        instantmenu -c -l 18 -h -1 -q "notification" -bw 4 -a 4)"
+    # wrap lines and filter out lines that are not notifications
+    read -r SELECTION < <({
+        echo "$NREAD" | grep -o '\[.*' | sed -e "s/.\{150\}/&\n/g" |
+            sed 's/\[\([0-9]*:[0-9]*\)\]  (\(.*\)) \*\(.*\)\* \(.*\)/:g Application :  \2\n>            \1\n>      \3/g'
+        echo "$READMESSAGE
+> "
+        echo ':b Back
+:r Delete
+:y Close'
+    } | instantmenu -c -l 18 -h -1 -q "notification" -bw 4 -a 4)
 
     [ -z "$SELECTION" ] && exit
+    instantnotifyctl r "$MESSAGE"
+
     case "$SELECTION" in
     *Delete)
         instantnotifyctl d "$MESSAGE"
@@ -53,5 +64,6 @@ while [ -n "$NREAD" ]; do
         ;;
     esac
 
-    NREAD=$(notifmenu)
+    refreshmenu
+
 done
