@@ -25,6 +25,12 @@ case $1 in
 a*)
     # add notification
     shift 1
+
+    if [ -z "$1" ]; then
+        echo "usage: instantnotifyctl a application title message"
+        exit
+    fi
+
     DATE=$(date +%H:%M)
     APPLICATION="${1:-application}"
     TITLE="${2:-title}"
