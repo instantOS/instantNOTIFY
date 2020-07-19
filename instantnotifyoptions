@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# todo
+
+echo 'delete all notification from a specific application
+delete all notifications
+delete notifications containing keyword'
