@@ -1,0 +1,49 @@
+#!/bin/bash
+
+sq() {
+    sqlite3 ~/.cache/instantos/notifications.db "$1"
+}
+
+initdb() {
+    mkdir -p ~/.cache/instantos
+    sq 'CREATE TABLE "notifications" ("date" TEXT, "application" TEXT, "title" TEXT, "message" TEXT, "read" INTEGER);'
+}
+
+cleanstring() {
+    sed 's/"/q/g' | sed 's/;:;/;;;/g'
+}
+
+addnotification() {
+    sq 'INSERT INTO notifications (date, application, title, message, read) VALUES ("'$1'", "'$2'", "'"$(echo $3 | sed 's/"//g')"'", "'"$(echo $4 | sed 's/"//g')"'", '$5');'
+}
+
+if ! [ -e ~/.cache/instantos/notifications.db ]; then
+    initdb
+fi
+
+case $1 in
+a*)
+    # add notification
+    shift 1
+    DATE=$(date +%H:%M)
+    APPLICATION="${1:-application}"
+    TITLE="${2:-title}"
+    MESSAGE="${3:-helloworld}"
+    addnotification "$DATE" "$APPLICATION" "$TITLE" "$MESSAGE" "0"
+    ;;
+d*)
+    # delete notification
+    if [ -z "$2" ]; then
+        exit
+    fi
+    sq 'DELETE FROM notifications WHERE message="'"$2"'";'
+    ;;
+l*)
+    # list notifications
+    sqlite3 -separator ";:;" ~/.cache/instantos/notifications.db 'SELECT * from notifications;'
+    ;;
+r*)
+    # mark as read
+    sq 'UPDATE notifications SET read = 1 WHERE message="'"$2"'";'
+    ;;
+esac
