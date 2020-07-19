@@ -42,7 +42,7 @@ d*)
     if [ -z "$2" ]; then
         exit
     fi
-    sq 'DELETE FROM notifications WHERE message="'"$2"'";'
+    sq 'DELETE FROM notifications WHERE message="'"$2"'" AND title="'"$3"'";'
     ;;
 l*)
     # list notifications
@@ -50,11 +50,11 @@ l*)
     ;;
 r*)
     # mark as read
-    sq 'UPDATE notifications SET read = 1 WHERE message="'"$2"'";'
+    sq 'UPDATE notifications SET read = 1 WHERE message="'"$2"'" AND title="'"$3"'";'
     ;;
 u*)
     # mark as unread
-    sq 'UPDATE notifications SET read = 0 WHERE message="'"$2"'";'
+    sq 'UPDATE notifications SET read = 0 WHERE message="'"$2"'" AND title="'"$3"'";'
     ;;
 c*)
     # get amounf of unread notifications

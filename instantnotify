@@ -25,6 +25,8 @@ notifmenu() {
 refreshmenu() {
     NREAD=$(notifmenu)
     MESSAGE="$(echo "$NREAD" | grep -o '.*' | grep -o '[^]*')"
+    TITLE="$(echo "$NREAD" | grep -o '.*' | grep -o '\*.*\*' | grep -o '[^*]*')"
+    echo "title: $TITLE"
     READMESSAGE="$(echo "$MESSAGE" | sed -e 's/.\{50\}/&\n/g' | sed 's/^/>      /g')"
 }
 
@@ -44,11 +46,11 @@ while [ -n "$NREAD" ]; do
     } | instantmenu -c -l 18 -h -1 -q "notification" -bw 4 -a 4)
 
     [ -z "$SELECTION" ] && exit
-    [ "$SELECTION" = ":b Mark as unread" ] || instantnotifyctl r "$MESSAGE"
+    [ "$SELECTION" = ":b Mark as unread" ] || instantnotifyctl r "$MESSAGE" "$TITLE"
 
     case "$SELECTION" in
     *Delete)
-        instantnotifyctl d "$MESSAGE"
+        instantnotifyctl d "$MESSAGE" "$TITLE"
         ;;
     *Close)
         exit
@@ -57,7 +59,8 @@ while [ -n "$NREAD" ]; do
         echo "back"
         ;;
     *unread)
-        instantnotifyctl u "$MESSAGE"
+        echo "marking as unread"
+        instantnotifyctl u "$MESSAGE" "$TITLE"
         ;;
     *)
         echo "app"
