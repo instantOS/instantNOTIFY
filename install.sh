@@ -9,4 +9,5 @@ installscript() {
 installscript instantnotifyctl
 installscript instantnotify
 installscript instantnotifytrigger
+installscript instantnotifyoptions
 installscript instantnotifytrigger dunsttrigger

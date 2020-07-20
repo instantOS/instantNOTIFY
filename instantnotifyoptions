@@ -2,8 +2,27 @@
 
 # todo
 
-optionsmenu() {
-    echo ':b Delete all notification from application
+CHOICE="$(echo ':b Delete all notification from application
 :b Delete notifications containing keyword
-:r 﫨Delete all notifications' | instantmenu -c -l 18 -h -1 -q 'notification options' -bw 4 -a 4
-}
+:r 﫨Delete all notifications' | instantmenu -c -l 18 -h -1 -q 'notification options' -bw 4 -a 4)"
+
+case "$CHOICE" in
+*application)
+    APPCHOICE="$(instantnotifyctl la | sort -u |
+        imenu -l 'choose application')"
+    [ -z "$APPCHOICE" ] && exit
+    echo "deleting application notifications"
+    instantnotifyctl da "$APPCHOICE"
+    ;;
+*keyword)
+    KEYWORD="$(imenu -i 'keyword')"
+    [ -z "$KEYWORD" ] && exit
+    echo "deleting keyword notifications"
+    instantnotifyctl dd "$KEYWORD"
+    ;;
+*notifications)
+    imenu -c "delete all notifications?" || exit
+    echo "deleting all notifications"
+    instantnotifyctl dd
+    ;;
+esac
