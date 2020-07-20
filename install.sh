@@ -1,8 +1,8 @@
 #!/bin/bash
 
 installscript() {
-    [ -e "$1" ] || return 1
-    cat "$1" | sudo tee /usr/bin/"${2:-$1}"
+    [ -e "$1.sh" ] || return 1
+    cat "$1.sh" | sudo tee /usr/bin/"${2:-$1}"
     sudo chmod 755 /usr/bin/"${2:-$1}"
 }
 
