@@ -22,6 +22,7 @@ if ! echo "$1" | grep -Eiq '(discord|spotify|thunderbird|mailspring)' && ! iconf
     mpv ~/instantos/notifications/notification.ogg
 fi &
 
+# instantmenu crashes when displaying messages that are too long
 if echo "$3" | grep -E '.{500,}'; then
     CONTENTS="message too long to display"
 else

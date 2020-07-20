@@ -38,10 +38,6 @@ a*)
     addnotification "$DATE" "$APPLICATION" "$TITLE" "$MESSAGE" "0"
     ;;
 d*)
-    # delete notification
-    if [ -z "$2" ]; then
-        exit
-    fi
     sq 'DELETE FROM notifications WHERE message="'"$2"'" AND title="'"$3"'";'
     ;;
 l*)
@@ -59,5 +55,13 @@ u*)
 c*)
     # get amounf of unread notifications
     sq 'SELECT count(read) FROM notifications WHERE read=0;'
+    ;;
+sa)
+    # delete all notifications from a specific application
+    sq 'DELETE FROM notifications WHERE application="'"$2"'";'
+    ;;
+sd)
+    # delete all notifications
+    sq 'DELETE FROM notifications;'
     ;;
 esac
