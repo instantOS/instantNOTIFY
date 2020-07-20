@@ -2,6 +2,8 @@
 
 # todo
 
-echo 'delete all notification from a specific application
-delete all notifications
-delete notifications containing keyword'
+optionsmenu() {
+    echo ':b Delete all notification from application
+:b Delete notifications containing keyword
+:r 﫨Delete all notifications' | instantmenu -c -l 18 -h -1 -q 'notification options' -bw 4 -a 4
+}
