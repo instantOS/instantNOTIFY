@@ -5,6 +5,7 @@
 CHOICE="$(echo ':b Delete all notification from application
 :b Delete notifications containing keyword
 :r 﫨Delete all notifications
+:b Delete read
 :b Back' | instantmenu -c -l 18 -h -1 -q 'notification options' -bw 4 -a 4)"
 
 [ -z "$CHOICE" ] && exit
@@ -42,5 +43,8 @@ case "$CHOICE" in
 *Back)
     instantnotify &
     exit
+    *read)
+
+    ;;
     ;;
 esac

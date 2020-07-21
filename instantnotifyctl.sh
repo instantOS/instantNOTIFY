@@ -49,6 +49,10 @@ dk)
     # delete notification containing
     sq 'DELETE FROM notifications WHERE message LIKE "%'"$2"'%" OR title LIKE "%'"$2"'%";'
     ;;
+dr)
+    # delete notification containing
+    sq 'DELETE FROM notifications WHERE read = 1;'
+    ;;
 d*)
     sq 'DELETE FROM notifications WHERE message="'"$2"'" AND title="'"$3"'";'
     ;;
