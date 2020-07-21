@@ -40,11 +40,12 @@ case "$CHOICE" in
     echo "deleting all notifications"
     instantnotifyctl dd
     ;;
+*read)
+    instantnotifyctl dr
+
+    ;;
 *Back)
     instantnotify &
     exit
-    *read)
-
-    ;;
     ;;
 esac

@@ -20,7 +20,7 @@ cd /tmp/notifications
 notifmenu() {
     #   sed 's/^/:b /g' | instantmenu -c -l 18 -h -1 -p "notifications" -q "search notifications" -bw 4 -a 4 | grep -o '\[.*'
     instantnotifyctl l | sed 's/\(.*\);:;\(.*\);:;\(.*\);:;\(.*\);:;\(.*\)/:b \5 [\1]  (\2) *\3* \4/g' | sed 's/^:b 0/:r /g' | sed 's/^:b 1/:b /g' | tac |
-        instantmenu -c -l 18 -h -1 -p "notifications" -lc "instantnotifyoptions" -q "search notifications" -bw 4 -a 4 | grep -o '\[.*'
+        instantmenu -i -c -l 18 -h -1 -p "notifications" -lc "instantnotifyoptions" -q "search notifications" -bw 4 -a 4 | grep -o '\[.*'
 }
 refreshmenu() {
     NREAD=$(notifmenu)
