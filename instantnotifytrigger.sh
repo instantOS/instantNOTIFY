@@ -20,14 +20,14 @@ if ! echo "$1" | grep -Eiq '(discord|spotify|thunderbird|mailspring)' && ! iconf
         fi
     fi
 
-    if [ -e ~/instantos/notifications/customsound ]
+    if ! iconf -i nonotify
     then
-        if ! iconf -i nonotify
+        if [ -e ~/instantos/notifications/customsound ]
         then
-            mpv ~/instantos/notifications/customsound
+                mpv ~/instantos/notifications/customsound
+        else
+            mpv ~/instantos/notifications/notification.ogg
         fi
-    else
-        mpv ~/instantos/notifications/notification.ogg
     fi
 
 fi &
