@@ -19,7 +19,17 @@ if ! echo "$1" | grep -Eiq '(discord|spotify|thunderbird|mailspring)' && ! iconf
             exit
         fi
     fi
-    mpv ~/instantos/notifications/notification.ogg
+
+    if [ -e ~/instantos/notifications/customsound ]
+    then
+        if ! iconf -i nonotify
+        then
+            mpv ~/instantos/notifications/customsound
+        fi
+    else
+        mpv ~/instantos/notifications/notification.ogg
+    fi
+
 fi &
 
 # instantmenu crashes when displaying messages that are too long
