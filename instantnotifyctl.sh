@@ -34,7 +34,7 @@ a*)
     DATE=$(date +%H:%M)
     APPLICATION="${1:-application}"
     TITLE="${2:-title}"
-    MESSAGE="${3:-helloworld}"
+    MESSAGE="${3:-...}"
     addnotification "$DATE" "$APPLICATION" "$TITLE" "$MESSAGE" "0"
     ;;
 da)
