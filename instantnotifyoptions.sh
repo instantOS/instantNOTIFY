@@ -2,7 +2,8 @@
 
 # todo
 
-CHOICE="$(echo ':b Delete all notification from application
+CHOICE="$(echo ':y ﮖDo not disturb
+:b Delete all notification from application
 :b Delete notifications containing keyword
 :r 﫨Delete all notifications
 :b Delete read
@@ -11,6 +12,20 @@ CHOICE="$(echo ':b Delete all notification from application
 [ -z "$CHOICE" ] && exit
 
 case "$CHOICE" in
+*disturb)
+    if imenu -c "Enable do not disturb mode? This will prevent all notifications"; then
+        dunstctl set-paused true
+        iconf -i donotdisturb 1
+    else
+        iconf -i donotdisturb 0
+        if dunstctl get-paused | grep -q 'true'; then
+            dunstctl set-paused false
+            sleep 0.2
+            notify-send 'notifications active'
+        fi
+    fi
+    ;;
+
 *application)
     read -r APPCHOICE < <(
         {
