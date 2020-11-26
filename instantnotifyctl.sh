@@ -21,7 +21,7 @@ if ! [ -e ~/.cache/instantos/notifications.db ]; then
     initdb
 fi
 
-case $1 in
+case "$1" in
 a*)
     # add notification
     shift 1
@@ -52,6 +52,15 @@ dk)
 dr)
     # delete notification containing
     sq 'DELETE FROM notifications WHERE read = 1;'
+    ;;
+dl)
+    if [ -n "$2" ] && [ "$2" -eq "$2" ]
+    then
+sq 'DELETE FROM notifications WHERE title IN (SELECT title FROM notifications LIMIT '"$2"') AND message IN (SELECT message FROM notifications LIMIT '"$2"') AND date IN (SELECT date FROM notifications LIMIT '"$2"');'
+    else
+        echo "delete last n notifications, please enter a number"
+        exit 1
+    fi
     ;;
 d*)
     sq 'DELETE FROM notifications WHERE message="'"$2"'" AND title="'"$3"'";'
