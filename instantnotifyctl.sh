@@ -54,12 +54,23 @@ dr)
     sq 'DELETE FROM notifications WHERE read = 1;'
     ;;
 dl)
-    if [ -n "$2" ] && [ "$2" -eq "$2" ]
-    then
-sq 'DELETE FROM notifications WHERE title IN (SELECT title FROM notifications LIMIT '"$2"') AND message IN (SELECT message FROM notifications LIMIT '"$2"') AND date IN (SELECT date FROM notifications LIMIT '"$2"');'
+    if [ -n "$2" ] && [ "$2" -eq "$2" ]; then
+        sq 'DELETE FROM notifications WHERE title IN (SELECT title FROM notifications LIMIT '"$2"') AND message IN (SELECT message FROM notifications LIMIT '"$2"') AND date IN (SELECT date FROM notifications LIMIT '"$2"');'
     else
         echo "delete last n notifications, please enter a number"
         exit 1
+    fi
+    ;;
+dc)
+    # clean old notifications
+    NHISTSIZE="$(iconf notifyhistsize:1000)"
+    NCOUNT="$(instantnotifyctl l | wc -l)"
+    if [ -z "$NCOUNT" ] || [ -z "$NCOUNT" ]; then
+        exit 1
+    fi
+    if [ "$NCOUNT" -gt "$NHISTSIZE" ] && [ "$NHISTSIZE" -gt 1 ]; then
+        echo "cleaning old notifications"
+        instantnotifyctl dl "$((NCOUNT - NHISTSIZE))"
     fi
     ;;
 d*)

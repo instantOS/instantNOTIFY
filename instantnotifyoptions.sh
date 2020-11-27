@@ -7,6 +7,7 @@ CHOICE="$(echo ':y ﮖDo not disturb
 :b Delete notifications containing keyword
 :r 﫨Delete all notifications
 :b Delete read
+:b History size
 :b Back' | instantmenu -c -l 18 -h -1 -q 'notification options' -bw 4 -a 4)"
 
 [ -z "$CHOICE" ] && exit
@@ -57,7 +58,17 @@ case "$CHOICE" in
     ;;
 *read)
     instantnotifyctl dr
-
+    ;;
+*size)
+    HSIZE="$(imenu -i 'enter maximum amount of notifications to be kept')"
+    [ -z "$HSIZE" ] && exit
+    if ! [ "$HSIZE" -eq "$HSIZE" ] || ! [ "$HSIZE" -gt 1 ]
+    then
+        imenu -m 'enter a number please'
+        instantnotifyoptions
+        exit
+    fi
+    iconf notifyhistsize "$HSIZE"
     ;;
 *Back)
     instantnotify &
