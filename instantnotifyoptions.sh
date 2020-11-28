@@ -19,7 +19,7 @@ case "$CHOICE" in
         iconf -i donotdisturb 1
     else
         iconf -i donotdisturb 0
-        if dunstctl get-paused | grep -q 'true'; then
+        if dunstctl is-paused | grep -q 'true'; then
             dunstctl set-paused false
             sleep 0.2
             notify-send 'notifications active'
