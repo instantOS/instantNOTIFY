@@ -32,7 +32,7 @@ case "$CHOICE" in
         {
             instantnotifyctl la | sort -u
             echo ":b Back"
-        } | instantmenu -l 10 -c -h -1 -bw 4
+        } | instantmenu -l 10 -i -c -h -1 -bw 4
     )
 
     if grep -q ':b Back' <<<"$APPCHOICE"; then

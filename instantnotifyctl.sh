@@ -71,6 +71,8 @@ dc)
     if [ "$NCOUNT" -gt "$NHISTSIZE" ] && [ "$NHISTSIZE" -gt 1 ]; then
         echo "cleaning old notifications"
         instantnotifyctl dl "$((NCOUNT - NHISTSIZE))"
+    else
+        echo "no notifications to clean"
     fi
     ;;
 d*)

@@ -2,13 +2,26 @@
 
 # gets executed each time dunst receives a notification
 
-# ignore some apps
-if echo "$2" | grep -q 'instantASSIST'; then
+[ -e ~/.config/instantos ] || mkdir -p ~/.config/instantos/
+
+if ! [ -e ~/.config/instantos/notifyignore ]; then
+    echo "creating notifyignore"
+    cat /usr/share/instantnotify/notifyignore >~/.config/instantos/notifyignore
+fi
+
+if ! [ -e ~/.config/instantos/notifysilent ]; then
+    echo "creating notifyignore"
+    cat /usr/share/instantnotify/notifysilent >~/.config/instantos/notifysilent
+fi
+
+if grep -Fiq "$1" ~/.config/instantos/notifyignore
+then
+    echo "ignoring notification from $1"
     exit
 fi
 
 # some apps dont need/already have notification sounds
-if ! echo "$1" | grep -Eiq '(discord|spotify|thunderbird|mailspring)' && ! iconf -i mutenotifications; then
+if ! grep -iqF "$1" ~/.config/instantos/notifysilent && ! iconf -i mutenotifications; then
     # play notification sound
     if ! [ -e ~/instantos/notifications/notification.ogg ]; then
         if checkinternet; then
@@ -20,11 +33,9 @@ if ! echo "$1" | grep -Eiq '(discord|spotify|thunderbird|mailspring)' && ! iconf
         fi
     fi
 
-    if ! iconf -i nonotify
-    then
-        if [ -e ~/instantos/notifications/customsound ]
-        then
-                mpv ~/instantos/notifications/customsound
+    if ! iconf -i nonotify; then
+        if [ -e ~/instantos/notifications/customsound ]; then
+            mpv ~/instantos/notifications/customsound
         else
             mpv ~/instantos/notifications/notification.ogg
         fi
