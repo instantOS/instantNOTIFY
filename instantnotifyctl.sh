@@ -17,6 +17,27 @@ addnotification() {
     sq 'INSERT INTO notifications (date, application, title, message, read) VALUES ("'$1'", "'$2'", "'"$(echo $3 | sed 's/"//g')"'", "'"$(echo $4 | sed 's/"//g')"'", '$5');'
 }
 
+echousage() {
+    echo 'instantnotifyctl action [arguments]
+    da [application]      delete notifications from one application
+    dd                    delete notifications
+    dk [keyword]          delete notifications containing keyword
+    dr                    delete read notifications
+    dc                    delete notifications older than the n newest ones
+                          customizable through iconf notifyhistsize
+    d [message] [title]   delete message with specific message and title
+    l                     list all notifications
+    la                    list all applications that have notifications
+    r [message] [title]   mark message as read
+    u [message] [title]   mark message as unread
+    c                     get amount of unread notifications'
+    exit
+}
+
+if [ -z "$1" ] || [ "$1" = '-h' ] || [ "$1" = '--help' ]; then
+    echousage
+fi
+
 if ! [ -e ~/.cache/instantos/notifications.db ]; then
     initdb
 fi

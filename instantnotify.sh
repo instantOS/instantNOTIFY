@@ -11,11 +11,11 @@
 if ! [ -e /tmp/notifications/notif.txt ]; then
     echo "creating notification dir"
     mkdir /tmp/notifications
-    cd /tmp/notifications
+    cd /tmp/notifications || exit 1
     echo "press enter to open submenu" >notif.txt
 fi
 
-cd /tmp/notifications
+cd /tmp/notifications || exit 1
 
 notifmenu() {
     #   sed 's/^/:b /g' | instantmenu -c -l 18 -h -1 -p "notifications" -q "search notifications" -bw 4 -a 4 | grep -o '\[.*'

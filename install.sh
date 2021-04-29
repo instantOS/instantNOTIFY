@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# TODO: replace with makefile
+
 installscript() {
     [ -e "$1.sh" ] || return 1
     cat "$1.sh" | sudo tee /usr/bin/"${2:-$1}"
