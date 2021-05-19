@@ -27,7 +27,7 @@ if ! grep -iqF "$1" ~/.config/instantos/notifysilent && ! iconf -i mutenotificat
         if checkinternet; then
             mkdir -p ~/instantos/notifications/
             wget -qO ~/instantos/notifications/notification.ogg \
-                "https://notificationsounds.com/notification-sounds/me-too-603/download/ogg"
+                "http://notificationsound.surge.sh/notification.ogg"
         else
             exit
         fi
