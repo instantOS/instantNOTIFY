@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# todo
+# Graphical options menu for managing the notification center
 
 CHOICE="$(echo ':y ﮖDo not disturb
 :b Delete all notification from application
 :b Delete notifications containing keyword
-:r 﫨Delete all notifications
+:r 﫨Delete all notification
 :b Delete read
 :b History size
 :b Back' | instantmenu -c -l 18 -h -1 -q 'notification options' -bw 4 -a 4)"
