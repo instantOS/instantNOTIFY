@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# command line interface for managing the database
+# of recorded dunst notifications
+
 sq() {
     sqlite3 ~/.cache/instantos/notifications.db "$1"
 }
