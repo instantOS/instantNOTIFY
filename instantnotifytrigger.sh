@@ -14,7 +14,7 @@ if ! [ -e ~/.config/instantos/notifysilent ]; then
     cat /usr/share/instantnotify/notifysilent >~/.config/instantos/notifysilent
 fi
 
-if grep -Fiq "$1" ~/.config/instantos/notifyignore
+if grep -Fiq "$1" ~/.config/instantos/notifyignore || [ "$1" = "instantASSIST" ]
 then
     echo "ignoring notification from $1"
     exit
