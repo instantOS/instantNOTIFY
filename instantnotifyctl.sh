@@ -107,7 +107,15 @@ la*)
     ;;
 l*)
     # list notifications
-    sqlite3 -separator ";:;" ~/.cache/instantos/notifications.db 'SELECT * FROM notifications;'
+    if [ -z "$2" ] || ! [ "$2" -eq "$2" ]; then
+        sqlite3 -separator ";:;" ~/.cache/instantos/notifications.db 'SELECT * FROM notifications;'
+    else
+
+        LIMIT="$(($2 * 700))"
+        sqlite3 -separator ";:;" \
+            ~/.cache/instantos/notifications.db \
+            'SELECT * FROM notifications'" LIMIT $LIMIT, 700;"
+    fi
     ;;
 r*)
     # mark as read
@@ -116,6 +124,10 @@ r*)
 u*)
     # mark as unread
     sq 'UPDATE notifications SET read = 0 WHERE message="'"$2"'" AND title="'"$3"'";'
+    ;;
+ca)
+    # get count of unread notifications
+    sq 'SELECT count(read) FROM notifications;'
     ;;
 c*)
     # get count of unread notifications

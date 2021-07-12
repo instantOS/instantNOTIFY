@@ -17,11 +17,45 @@ fi
 
 cd /tmp/notifications || exit 1
 
+NOTIFCOUNT="$(instantnotifyctl ca)"
+PAGECOUNT="$((NOTIFCOUNT / 700))"
+
+NOTIFPAGE="0"
+
 notifmenu() {
-    #   sed 's/^/:b /g' | instantmenu -c -l 18 -h -1 -p "notifications" -q "search notifications" -bw 4 -a 4 | grep -o '\[.*'
-    instantnotifyctl l | sed 's/\(.*\);:;\(.*\);:;\(.*\);:;\(.*\);:;\(.*\)/:b \5 [\1]  (\2) *\3* \4/g' | sed 's/^:b 0/:r /g' | sed 's/^:b 1/:b /g' | tac |
-        instantmenu -i -c -l 18 -h -1 -p "notifications" -lc "instantnotifyoptions" -q "search notifications" -bw 4 -a 4 | grep -o '\[.*'
+    CHOICE="$(
+        {
+
+            if ! [ "$NOTIFPAGE" = 0 ]; then
+                echo ':g Previous page'
+            fi
+
+            instantnotifyctl l "$NOTIFPAGE" | sed 's/\(.*\);:;\(.*\);:;\(.*\);:;\(.*\);:;\(.*\)/:b \5 [\1]  (\2) *\3* \4/g' | sed 's/^:b 0/:r /g' | sed 's/^:b 1/:b /g' | tac
+
+            if [ "$PAGECOUNT" -gt "$NOTIFPAGE" ]; then
+                echo ':g Next page'
+            fi
+
+        } | instantmenu -i -c -l 18 -h -1 -p "notifications" -lc "instantnotifyoptions" -q "search notifications" -bw 4 -a 4
+
+    )"
+
+    if [ ':g Next page' = "$CHOICE" ]; then
+        NOTIFPAGE="$((NOTIFPAGE + 1))"
+        notifmenu
+        return
+    elif [ "$CHOICE" = ':g Previous page' ]; then
+        NOTIFPAGE="$((NOTIFPAGE - 1))"
+        notifmenu
+        return
+    elif [ -z "$CHOICE" ]; then
+        exit
+    else
+        grep -o '\[.*' <<<"$CHOICE"
+    fi
+
 }
+
 refreshmenu() {
     NREAD=$(notifmenu)
     MESSAGE="$(echo "$NREAD" | grep -o '.*' | grep -o '[^]*')"
