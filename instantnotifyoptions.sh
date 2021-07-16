@@ -3,9 +3,9 @@
 # Graphical options menu for managing the notification center
 
 CHOICE="$(echo ':y ﮖDo not disturb
-:b Delete all notification from application
+:b Delete all notifications from application
 :b Delete notifications containing keyword
-:r 﫨Delete all notification
+:r 﫨Delete al notifications
 :b Delete read
 :b History size
 :b Back' | instantmenu -c -l 18 -h -1 -q 'notification options' -bw 4 -a 4)"
@@ -62,8 +62,7 @@ case "$CHOICE" in
 *size)
     HSIZE="$(imenu -i 'enter maximum amount of notifications to be kept')"
     [ -z "$HSIZE" ] && exit
-    if ! [ "$HSIZE" -eq "$HSIZE" ] || ! [ "$HSIZE" -gt 1 ]
-    then
+    if ! [ "$HSIZE" -eq "$HSIZE" ] || ! [ "$HSIZE" -gt 1 ]; then
         imenu -m 'enter a number please'
         instantnotifyoptions
         exit

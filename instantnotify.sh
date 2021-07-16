@@ -23,14 +23,18 @@ PAGECOUNT="$((NOTIFCOUNT / 700))"
 NOTIFPAGE="0"
 
 notifmenu() {
+
+    NOTIFICATIONLIST="$(
+        instantnotifyctl l "$NOTIFPAGE" | sed 's/\(.*\);:;\(.*\);:;\(.*\);:;\(.*\);:;\(.*\)/:b \5 [\1]  (\2) *\3* \4/g' | sed 's/^:b 0/:r /g' | sed 's/^:b 1/:b /g' | tac
+    )"
+
     CHOICE="$(
         {
-
             if ! [ "$NOTIFPAGE" = 0 ]; then
                 echo ':g Previous page'
             fi
 
-            instantnotifyctl l "$NOTIFPAGE" | sed 's/\(.*\);:;\(.*\);:;\(.*\);:;\(.*\);:;\(.*\)/:b \5 [\1]  (\2) *\3* \4/g' | sed 's/^:b 0/:r /g' | sed 's/^:b 1/:b /g' | tac
+            cut -c-700 <<<"$NOTIFICATIONLIST"
 
             if [ "$PAGECOUNT" -gt "$NOTIFPAGE" ]; then
                 echo ':g Next page'
@@ -51,7 +55,7 @@ notifmenu() {
     elif [ -z "$CHOICE" ]; then
         exit
     else
-        grep -o '\[.*' <<<"$CHOICE"
+        OUTCHOICE="$(grep "$CHOICE" <<<"$NOTIFICATIONLIST" | head -1 | grep -o '\[.*')"
     fi
 
 }
