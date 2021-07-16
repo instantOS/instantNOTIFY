@@ -20,7 +20,7 @@ cd /tmp/notifications || exit 1
 NOTIFCOUNT="$(instantnotifyctl ca)"
 PAGECOUNT="$((NOTIFCOUNT / 700))"
 
-NOTIFPAGE="0"
+NOTIFPAGE="$PAGECOUNT"
 
 notifmenu() {
 
@@ -30,13 +30,13 @@ notifmenu() {
 
     CHOICE="$(
         {
-            if ! [ "$NOTIFPAGE" = 0 ]; then
+            if [ "$NOTIFPAGE" -lt "$PAGECOUNT" ]; then
                 echo ':g Previous page'
             fi
 
-            cut -c-700 <<<"$NOTIFICATIONLIST"
+            cut -c-500 <<<"$NOTIFICATIONLIST"
 
-            if [ "$PAGECOUNT" -gt "$NOTIFPAGE" ]; then
+            if [ "$NOTIFPAGE" -gt 0 ]; then
                 echo ':g Next page'
             fi
 
@@ -45,17 +45,18 @@ notifmenu() {
     )"
 
     if [ ':g Next page' = "$CHOICE" ]; then
-        NOTIFPAGE="$((NOTIFPAGE + 1))"
+        NOTIFPAGE="$((NOTIFPAGE - 1))"
         notifmenu
         return
     elif [ "$CHOICE" = ':g Previous page' ]; then
-        NOTIFPAGE="$((NOTIFPAGE - 1))"
+        NOTIFPAGE="$((NOTIFPAGE + 1))"
         notifmenu
         return
     elif [ -z "$CHOICE" ]; then
         exit
     else
-        OUTCHOICE="$(grep "$CHOICE" <<<"$NOTIFICATIONLIST" | head -1 | grep -o '\[.*')"
+        OUTCHOICE="$(grep -F "$CHOICE" <<<"$NOTIFICATIONLIST" | head -1 | grep -o '\[.*')"
+        echo "$OUTCHOICE"
     fi
 
 }
