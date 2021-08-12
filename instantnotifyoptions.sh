@@ -5,7 +5,7 @@
 CHOICE="$(echo ':y ﮖDo not disturb
 :b Delete all notifications from application
 :b Delete notifications containing keyword
-:r 﫨Delete al notifications
+:r 﫨Delete all notifications
 :b Delete read
 :b History size
 :b Back' | instantmenu -c -l 18 -h -1 -q 'notification options' -bw 4 -a 4)"
