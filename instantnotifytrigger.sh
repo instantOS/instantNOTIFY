@@ -35,9 +35,9 @@ if ! grep -iqF "$1" ~/.config/instantos/notifysilent && ! iconf -i mutenotificat
 
     if ! iconf -i nonotify; then
         if [ -e ~/instantos/notifications/customsound ]; then
-            mpv ~/instantos/notifications/customsound
+            mpv --keep-open='no' ~/instantos/notifications/customsound
         else
-            mpv ~/instantos/notifications/notification.ogg
+            mpv --keep-open='no' ~/instantos/notifications/notification.ogg
         fi
     fi
 
